@@ -2,6 +2,7 @@
 #define STRUCT_H
 
 #define NB_SUBCARRIERS 32
+#define NB_MAX_USER 12
 #define NB_USERS 3
 #define NB_TIME_SLOTS 5 
 #define BUFFERS_PER_USER 10
@@ -30,8 +31,7 @@ struct User
 typedef struct Antenne Antenne;
 struct Antenne
 {
-	User *users[NB_USERS];
+	User *users[NB_MAX_USER];
 };
 
 #endif
-

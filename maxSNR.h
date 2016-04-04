@@ -3,6 +3,6 @@
 
 #include "struct.h"
 
-int maxSNR(Antenne *antenne);
+int maxSNR(Antenne *antenne, int nb_users, int nb_sub);
 
 #endif

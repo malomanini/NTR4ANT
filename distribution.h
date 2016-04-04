@@ -6,5 +6,6 @@
 
 double gaussrand();
 int getSNR(int distance);
+int getNbBit();
 
 #endif
