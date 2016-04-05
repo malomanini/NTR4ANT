@@ -1,7 +1,7 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-#define NB_SUBCARRIERS 32
+#define NB_SUBCARRIERS 128
 #define NB_MAX_USER 12
 #define NB_USERS 3
 #define NB_TIME_SLOTS 5 

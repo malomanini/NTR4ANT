@@ -13,9 +13,12 @@ int main(){
 	long actualTime = 0;
 	int debitTotal = 0;
 	int nb_tours = 1000;
-	int i, temp;
+	int i, indice = 0, temp;
 	int nb_users1, nb_users2, nb_users3, nb_users4;
 	int nb_sub1, nb_sub2, nb_sub3, nb_sub4;
+	int userSwitch[4];
+	int subSwitch[4];
+
 
 	/*	Users *Antenne1 = malloc(sizeof(Users)*nb_users);
 	Users *Antenne2 = malloc(sizeof(Users)*nb_users);
@@ -26,6 +29,16 @@ int main(){
 	Antenne Antenne3;
 	Antenne Antenne4;
 
+	//nombre d'utilisateurs possible
+	userSwitch[0] = 1;
+	userSwitch[1] = 4;
+ 	userSwitch[2] = 5;
+	userSwitch[3] = 2;
+	//valeur de fréquences possible
+	subSwitch[0] = 11;
+	subSwitch[1] = 43;
+ 	subSwitch[2] = 53;
+	subSwitch[3] = 21;
 
 	nb_users1 = 6;
 	nb_users2 = 6;
@@ -59,29 +72,42 @@ int main(){
 
 		produceBit(&Antenne1, actualTime, nb_users1);
 		initMatriceDebits(&Antenne1, nb_users1);
-		temp = maxSNR(&Antenne1, nb_users1, nb_sub1);
+		temp = RR(&Antenne1, nb_users1, nb_sub1);
 		debitTotal += temp;
 		produceBit(&Antenne2, actualTime, nb_users2);
 		initMatriceDebits(&Antenne2, nb_users2);
-		temp = maxSNR(&Antenne2, nb_users2, nb_sub2);
+		temp = RR(&Antenne2, nb_users2, nb_sub2);
 		debitTotal += temp;
 		produceBit(&Antenne3, actualTime, nb_users3);
 		initMatriceDebits(&Antenne3, nb_users3);
-		temp = maxSNR(&Antenne3, nb_users3, nb_sub3);
+		temp = RR(&Antenne3, nb_users3, nb_sub3);
 		debitTotal += temp;
 		produceBit(&Antenne4, actualTime, nb_users4);
 		initMatriceDebits(&Antenne4, nb_users4);
-		temp = maxSNR(&Antenne4, nb_users4, nb_sub4);
+		temp = RR(&Antenne4, nb_users4, nb_sub4);
 		debitTotal += temp;
 
 
 		/*ENVOI DE LA TRAME */
+
+		/*Changement du nombre d'utilisateur*/
+		nb_users1 = userSwitch[(indice)%4];
+		nb_users2 = userSwitch[(indice+1)%4];
+		nb_users3 = userSwitch[(indice+2)%4];
+		nb_users4 = userSwitch[(indice+3)%4];
+
+		/*Allocation du nombre de frequences*/
+		nb_sub1 = subSwitch[(indice)%4];
+		nb_sub2 = subSwitch[(indice+1)%4];
+		nb_sub3 = subSwitch[(indice+2)%4];
+		nb_sub4 = subSwitch[(indice+3)%4];
 
 		/*Mise à jours des délais*/
 
 
 		/*Incrémentation du temps*/
 		actualTime += 2;
+		indice = (indice + 1) % 4;
 
 	}
 	

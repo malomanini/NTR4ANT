@@ -47,7 +47,7 @@ int getSNR(int distance){
 
 int getNbBit(){
 	int r = 0;
-	double temp = ((gaussrand()*50)+ 250 );
+	double temp = ((gaussrand()*50)+ 150 );
 	r = (int)temp;
 	if(r%2){
 		r++;
