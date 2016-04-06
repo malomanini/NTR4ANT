@@ -2,7 +2,7 @@
 #define STRUCT_H
 
 #define NB_SUBCARRIERS 128
-#define NB_MAX_USER 12
+#define NB_MAX_USER 200
 #define NB_USERS 3
 #define NB_TIME_SLOTS 5 
 #define BUFFERS_PER_USER 10
@@ -25,6 +25,7 @@ struct User
 	int SNRmoyen;
 	int SNRActuels[NB_SUBCARRIERS];
 	int sommeDelai;
+	int sommePaquets;
 	Packet *lePaquet;
 };
 

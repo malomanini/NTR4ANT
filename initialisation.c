@@ -57,7 +57,7 @@ void initMatriceDebits(Antenne *antenne, int nb_users){
 
 
 //!!! Amélioration possible en ajoutant un LastPacket 
-void produceBit(Antenne *antenne, int actualTime, int nb_users){
+void produceBit(Antenne *antenne, int nbBitsgenere, int nb_users){
 	int i = 0;
 	int bitsGeneres ;
 	int debordement = 0;
@@ -71,7 +71,7 @@ void produceBit(Antenne *antenne, int actualTime, int nb_users){
 	for(i = 0; i < (nb_users); i++){
 		continuer = 1;
 		packet=NULL;
-		bitsGeneres=getNbBit();
+		bitsGeneres=nbBitsgenere;
 		packet = antenne->users[i]->lePaquet;
 		//recupere le dernier paquet
 		while(packet->nextPacket != NULL)
@@ -85,6 +85,7 @@ void produceBit(Antenne *antenne, int actualTime, int nb_users){
         		bitsGeneres -= 100 - packet->bitsRestants;
         		packet->bitsRestants = 100;
         		packet->nextPacket = createPacket();
+        		antenne->users[i]->sommePaquets++;
         		packet = packet->nextPacket;
         	}
         	else{
