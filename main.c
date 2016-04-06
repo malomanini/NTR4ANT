@@ -89,10 +89,10 @@ int main(){
 			subSwitch[2] = nb_users3/nb_user*NB_SUBCARRIERS;
 			subSwitch[3] = nb_users4/nb_user*NB_SUBCARRIERS;
 
-			/*printf("\nnombre sub 1 a allouer : %.0f\n\n", subSwitch[0]);
+			printf("\nnombre sub 1 a allouer : %.0f\n\n", subSwitch[0]);
 			printf("\nnombre sub 2 a allouer : %.0f\n\n", subSwitch[1]);
 			printf("\nnombre sub 3 a allouer : %.0f\n\n", subSwitch[2]);
-			printf("\nnombre sub 4 a allouer : %.0f\n\n", subSwitch[3]);*/
+			printf("\nnombre sub 4 a allouer : %.0f\n\n", subSwitch[3]);
 
 			nb_sub1 = subSwitch[0];
 			nb_sub2 = subSwitch[1];
