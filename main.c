@@ -11,7 +11,7 @@
 int main(){
 	FILE* fichier = NULL;
 	long actualTime = 1;
-	int debitTotal = 0;
+	double debitTotal = 0;
 	int debitTotalSimu = 0;
 	int nb_tours = 100;
 	int i, indice = 0, temp;
@@ -20,8 +20,8 @@ int main(){
 	int nbPaquetsTotal = 0;
 	int nbPaquetsNonEnvoyes = 0;
 	/*int choixAlgo = 0;*/
-	double nb_user = 1;
-	double nb_user_temp = 1;
+	int nb_user = 1;
+	int nb_user_temp = 1;
 	int nbBitsgenere = 20;
 	double subSwitch[4];
 	Packet *tmpPacket = NULL;
@@ -231,6 +231,7 @@ int main(){
 
 		}
 
+
 		printf("--------------------------------------------------------------\n");
 		printf("Statistiques pour %d utilisateurs: \n", nb_user);
 		printf("	Débit total : %.0f bits\n", debitTotal);
@@ -238,13 +239,14 @@ int main(){
 		printf("	Débit total de la simulation: %.3f bits/ms\n", (double)(debitTotal/Antenne1.actualTime));
 		printf("	Delai moyen : %.3f ms\n", (double)(sommeDelais/nbPaquetsTotal));
 		printf("	nbPaquetsNonEnvoyes : %d || nbPaquetsTotal : %d \n", nbPaquetsNonEnvoyes, nbPaquetsTotal);
+		
 
 		fichier = fopen("test.csv", "a");
 	    if (fichier != NULL)
 	    {
 	 
-	       fprintf(fichier,"%d;%.0f;%.0f\n", nb_user, debitTotal/Antenne1.actualTime, sommeDelais/nbPaquetsTotal);
-	 
+	    /*   fprintf(fichier,"%d;%.0f;%.0f\n", nb_user, debitTotal/Antenne1.actualTime, sommeDelais/nbPaquetsTotal);
+	 */
 		fclose(fichier);
 	    }
 		/*ENVOI DE LA TRAME */
