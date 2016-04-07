@@ -17,11 +17,15 @@ int main(){
 	int i, indice = 0, temp;
 	int nb_users1, nb_users2, nb_users3, nb_users4;
 	int nb_sub1, nb_sub2, nb_sub3, nb_sub4;
+	int nbPaquetsTotal = 0;
+	int nbPaquetsNonEnvoyes = 0;
 	/*int choixAlgo = 0;*/
 	double nb_user = 1;
 	double nb_user_temp = 1;
 	int nbBitsgenere = 20;
 	double subSwitch[4];
+	Packet *tmpPacket = NULL;
+	double sommeDelais = 0;
 
 
 	/*	Users *Antenne1 = malloc(sizeof(Users)*nb_users);
@@ -88,17 +92,17 @@ int main(){
 
 
 			nb_user_temp = nb_users1 + nb_users2 + nb_users3 + nb_users4;
-			printf("\nnombre utilisateur : %.3f\n\n", nb_user_temp);
+			/*printf("\nnombre utilisateur : %.3f\n\n", nb_user_temp);*/
 
 			subSwitch[0] = nb_users1/nb_user_temp*NB_SUBCARRIERS;
 			subSwitch[1] = nb_users2/nb_user_temp*NB_SUBCARRIERS;
 			subSwitch[2] = nb_users3/nb_user_temp*NB_SUBCARRIERS;
 			subSwitch[3] = nb_users4/nb_user_temp*NB_SUBCARRIERS;
-
+			/*
 			printf("\nnombre sub 1 a allouer : %.0f\n\n", subSwitch[0]);
 			printf("\nnombre sub 2 a allouer : %.0f\n\n", subSwitch[1]);
 			printf("\nnombre sub 3 a allouer : %.0f\n\n", subSwitch[2]);
-			printf("\nnombre sub 4 a allouer : %.0f\n\n", subSwitch[3]);
+			printf("\nnombre sub 4 a allouer : %.0f\n\n", subSwitch[3]);*/
 
 			nb_sub1 = subSwitch[0];
 			nb_sub2 = subSwitch[1];
@@ -121,37 +125,125 @@ int main(){
 		produceBit(&Antenne1, nbBitsgenere, nb_users1);
 		initMatriceDebits(&Antenne1, nb_users1);
 		temp = maxSNR(&Antenne1, nb_users1, nb_sub1);
-		printf("	Antenne 1 %d bits/ms\n", temp);
 		debitTotal += temp;
 		produceBit(&Antenne2, nbBitsgenere, nb_users2);
 		initMatriceDebits(&Antenne2, nb_users2);
 		temp = maxSNR(&Antenne2, nb_users2, nb_sub2);
-		printf("	Antenne 2 %d bits/ms\n", temp);
 		debitTotal += temp;
 		produceBit(&Antenne3, nbBitsgenere, nb_users3);
 		initMatriceDebits(&Antenne3, nb_users3);
 		temp = maxSNR(&Antenne3, nb_users3, nb_sub3);
-		printf("	Antenne 3 %d bits/ms\n", temp);
 		debitTotal += temp;
 		produceBit(&Antenne4, nbBitsgenere, nb_users4);
 		initMatriceDebits(&Antenne4, nb_users4);
 		temp = maxSNR(&Antenne4, nb_users4, nb_sub4);
-		printf("	Antenne 4 %d bits/ms\n", temp);
 		debitTotal += temp;
 
 		/*printf("\nStatistiques : \n");*/
-		printf("	Débit total du tour : %d bits/ms\n", debitTotal);
 		debitTotalSimu += debitTotal;
 		/*printf("Nombre d'utilisateur %d", nb_users1);
 		printf("Nombre d'utilisateur %d", nb_users2);
 		printf("Nombre d'utilisateur %d", nb_users3);
 		printf("Nombre d'utilisateur %d", nb_users4);*/
 
+		for(i = 0; i< nb_users1; i++){
+
+			/* Récupération des délais et nb de paquets restants dans les paquets non envoyes */
+			if(Antenne1.users[i]->lePaquet != NULL){
+
+				tmpPacket = Antenne1.users[i]->lePaquet;
+				while(tmpPacket->nextPacket != NULL){
+					/* Stats globales */
+					sommeDelais += (Antenne1.actualTime - tmpPacket->dateCreation);
+					nbPaquetsNonEnvoyes++;
+					nbPaquetsTotal++;
+					tmpPacket = tmpPacket->nextPacket;
+				}
+
+			}
+
+			/* Récupération des delais et paquets enregistrés */
+			sommeDelais += Antenne1.users[i]->sommeDelais;
+			nbPaquetsTotal += Antenne1.users[i]->sommePaquets;
+
+		}
+		for(i = 0; i< nb_users2; i++){
+
+			/* Récupération des délais et nb de paquets restants dans les paquets non envoyes */
+			if(Antenne2.users[i]->lePaquet != NULL){
+
+				tmpPacket = Antenne2.users[i]->lePaquet;
+				while(tmpPacket->nextPacket != NULL){
+					/* Stats globales */
+					sommeDelais += (Antenne2.actualTime - tmpPacket->dateCreation);
+					nbPaquetsNonEnvoyes++;
+					nbPaquetsTotal++;
+					tmpPacket = tmpPacket->nextPacket;
+				}
+
+			}
+
+			/* Récupération des delais et paquets enregistrés */
+			sommeDelais += Antenne2.users[i]->sommeDelais;
+			nbPaquetsTotal += Antenne2.users[i]->sommePaquets;
+
+		}
+		for(i = 0; i< nb_users3; i++){
+
+			/* Récupération des délais et nb de paquets restants dans les paquets non envoyes */
+			if(Antenne3.users[i]->lePaquet != NULL){
+
+				tmpPacket = Antenne3.users[i]->lePaquet;
+				while(tmpPacket->nextPacket != NULL){
+					/* Stats globales */
+					sommeDelais += (Antenne3.actualTime - tmpPacket->dateCreation);
+					nbPaquetsNonEnvoyes++;
+					nbPaquetsTotal++;
+					tmpPacket = tmpPacket->nextPacket;
+				}
+
+			}
+
+			/* Récupération des delais et paquets enregistrés */
+			sommeDelais += Antenne3.users[i]->sommeDelais;
+			nbPaquetsTotal += Antenne3.users[i]->sommePaquets;
+
+		}
+		for(i = 0; i< nb_users4; i++){
+
+			/* Récupération des délais et nb de paquets restants dans les paquets non envoyes */
+			if(Antenne4.users[i]->lePaquet != NULL){
+
+				tmpPacket = Antenne4.users[i]->lePaquet;
+				while(tmpPacket->nextPacket != NULL){
+					/* Stats globales */
+					sommeDelais += (Antenne4.actualTime - tmpPacket->dateCreation);
+					nbPaquetsNonEnvoyes++;
+					nbPaquetsTotal++;
+					tmpPacket = tmpPacket->nextPacket;
+				}
+
+			}
+
+			/* Récupération des delais et paquets enregistrés */
+			sommeDelais += Antenne4.users[i]->sommeDelais;
+			nbPaquetsTotal += Antenne4.users[i]->sommePaquets;
+
+		}
+
+		printf("--------------------------------------------------------------\n");
+		printf("Statistiques pour %d utilisateurs: \n", nb_user);
+		printf("	Débit total : %.0f bits\n", debitTotal);
+		printf("	Somme des delais: : %.3f ms\n", sommeDelais);
+		printf("	Débit total de la simulation: %.3f bits/ms\n", (double)(debitTotal/Antenne1.actualTime));
+		printf("	Delai moyen : %.3f ms\n", (double)(sommeDelais/nbPaquetsTotal));
+		printf("	nbPaquetsNonEnvoyes : %d || nbPaquetsTotal : %d \n", nbPaquetsNonEnvoyes, nbPaquetsTotal);
+
 		fichier = fopen("test.csv", "a");
 	    if (fichier != NULL)
 	    {
 	 
-	       /*fprintf(fichier,"%d\n", debitTotal/actualTime);*/
+	       fprintf(fichier,"%d;%.0f;%.0f\n", nb_user, debitTotal/Antenne1.actualTime, sommeDelais/nbPaquetsTotal);
 	 
 		fclose(fichier);
 	    }
