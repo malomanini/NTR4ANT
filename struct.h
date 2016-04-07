@@ -24,7 +24,7 @@ struct User
 	int bufferVide;
 	int SNRmoyen;
 	int SNRActuels[NB_SUBCARRIERS];
-	int sommeDelai;
+	int sommeDelais;
 	int sommePaquets;
 	Packet *lePaquet;
 };
@@ -33,6 +33,7 @@ typedef struct Antenne Antenne;
 struct Antenne
 {
 	User *users[NB_MAX_USER];
+	int actualTime;
 };
 
 #endif

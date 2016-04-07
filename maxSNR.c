@@ -7,22 +7,26 @@
 #include "initialisation.h"
 
 int maxSNR(Antenne *antenne, int nb_users, int nb_sub) {	
-	int MaxU;
-	int g, j, debitTotalTrame = 0;
+	int MaxU = 0;
+	int i, g, j, debitTotalTrame = 0;
+	int count = 0;
 
-	//A MODIFIERRRRRRRRRRRRRRR
-	for(j = 0; j < nb_sub ; j++){ //parcourt les subcariers
-		MaxU = MaxUser(antenne, j, nb_users);
+	for(g = 0; g < 5 ; g++){// parcours les timeslots, //tant que User.BufferVide > 0 ou que g<5, on transmet au debit actuel a cet user
+		for(j = 0; j < nb_sub ; j++){ //parcourt les subcariers
 
-		for(g = 0; g < NB_TIME_SLOTS ; g++){// parcours les timeslots, //tant que User.BufferVide > 0 ou que g<5, on transmet au debit actuel a cet user
-			if(empty(antenne, MaxU, nb_users)){
-				MaxU = MaxUser(antenne, j, nb_users);
+			for (i = 0; i < nb_users ; i++){
+
+				if((antenne->users[i]->SNRActuels[j] >= antenne->users[MaxU]->SNRActuels[j]) && (antenne->users[i]->bufferVide == 0)){
+					// si l'User a un meilleur debit, et que son buffer n'est pas vide: il devient le MaxUser 
+					MaxU = i;
+					
+				}
 			}
+			/*printf("maxU = %d   ", MaxU);*/
 			debitTotalTrame += consumeBit(antenne, MaxU, j);
+
 		}
 
 	}
 	return debitTotalTrame;
 }
-			
-	

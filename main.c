@@ -19,9 +19,9 @@ int main(){
 	int nb_sub1, nb_sub2, nb_sub3, nb_sub4;
 	/*int choixAlgo = 0;*/
 	double nb_user = 1;
+	double nb_user_temp = 1;
 	int nbBitsgenere = 20;
 	double subSwitch[4];
-	int dynAlloc = 0;
 
 
 	/*	Users *Antenne1 = malloc(sizeof(Users)*nb_users);
@@ -45,11 +45,9 @@ int main(){
 	scanf("%d", &nb_user);
 	printf("Nombre de tours pour la simulation: ");
 	scanf("%d", &nb_tours);*/
-	printf("dynAlloc ON/OFF ?");
-	scanf("%d", &dynAlloc);
 
-	nb_tours=1000;
-	nbBitsgenere=50;
+	nb_tours=100;
+	nbBitsgenere=150;
 
 
 	/*initAntenne(&Antenne1, nb_users1);
@@ -67,27 +65,35 @@ int main(){
 		fclose(fichier);
 	    }
 
-	/*while(nb_user <= 40){*/
+	while(nb_user <= 150){
 
 
 		
 	/*---BOUCLE PRINCIPALE---*/
 	for(i = 0; i < nb_tours; i++){
 
+
+
 		/*ALLOUE DYNAMIQUEMENT LES SUB*/
-		nb_users1 = (rand() % 35) + 5;
-		nb_users2 = (rand() % 15) + 5;
-		nb_users3 = (rand() % 15) + 5;
-		nb_users4 = (rand() % 35) + 5;
+		/*nb_users1 = (rand() % (int)((nb_user / 2)-5)) + 5;
+		nb_users2 = (rand() % (int)((nb_user / 2)-5)) + 5;
+		nb_users3 = (rand() % (int)((nb_user / 2)-5)) + 5;
 
-		if(dynAlloc){
-			nb_user = nb_users1 + nb_users2 + nb_users3 + nb_users4;
-			printf("\nnombre utilisateur : %.3f\n\n", nb_user);
+		nb_users4 = nb_user-nb_users1-nb_users2-nb_users3;*/
 
-			subSwitch[0] = nb_users1/nb_user*NB_SUBCARRIERS;
-			subSwitch[1] = nb_users2/nb_user*NB_SUBCARRIERS;
-			subSwitch[2] = nb_users3/nb_user*NB_SUBCARRIERS;
-			subSwitch[3] = nb_users4/nb_user*NB_SUBCARRIERS;
+		nb_users1 = nb_user/3;
+		nb_users2 = nb_user/4;
+		nb_users3 = nb_user/4;
+		nb_users4 = nb_user-nb_users1-nb_users2-nb_users3;
+
+
+			nb_user_temp = nb_users1 + nb_users2 + nb_users3 + nb_users4;
+			printf("\nnombre utilisateur : %.3f\n\n", nb_user_temp);
+
+			subSwitch[0] = nb_users1/nb_user_temp*NB_SUBCARRIERS;
+			subSwitch[1] = nb_users2/nb_user_temp*NB_SUBCARRIERS;
+			subSwitch[2] = nb_users3/nb_user_temp*NB_SUBCARRIERS;
+			subSwitch[3] = nb_users4/nb_user_temp*NB_SUBCARRIERS;
 
 			printf("\nnombre sub 1 a allouer : %.0f\n\n", subSwitch[0]);
 			printf("\nnombre sub 2 a allouer : %.0f\n\n", subSwitch[1]);
@@ -98,7 +104,7 @@ int main(){
 			nb_sub2 = subSwitch[1];
 			nb_sub3 = subSwitch[2];
 			nb_sub4 = subSwitch[3];
-		}
+
 		/*FIN D'ALLOC DES SUB*/
 
 		initAntenne(&Antenne1, nb_users1);
@@ -114,22 +120,22 @@ int main(){
 		/*Application de l'algorithme et ôtage des bits envoyés avec maxSNR*/
 		produceBit(&Antenne1, nbBitsgenere, nb_users1);
 		initMatriceDebits(&Antenne1, nb_users1);
-		temp = RR(&Antenne1, nb_users1, nb_sub1);
+		temp = maxSNR(&Antenne1, nb_users1, nb_sub1);
 		printf("	Antenne 1 %d bits/ms\n", temp);
 		debitTotal += temp;
 		produceBit(&Antenne2, nbBitsgenere, nb_users2);
 		initMatriceDebits(&Antenne2, nb_users2);
-		temp = RR(&Antenne2, nb_users2, nb_sub2);
+		temp = maxSNR(&Antenne2, nb_users2, nb_sub2);
 		printf("	Antenne 2 %d bits/ms\n", temp);
 		debitTotal += temp;
 		produceBit(&Antenne3, nbBitsgenere, nb_users3);
 		initMatriceDebits(&Antenne3, nb_users3);
-		temp = RR(&Antenne3, nb_users3, nb_sub3);
+		temp = maxSNR(&Antenne3, nb_users3, nb_sub3);
 		printf("	Antenne 3 %d bits/ms\n", temp);
 		debitTotal += temp;
 		produceBit(&Antenne4, nbBitsgenere, nb_users4);
 		initMatriceDebits(&Antenne4, nb_users4);
-		temp = RR(&Antenne4, nb_users4, nb_sub4);
+		temp = maxSNR(&Antenne4, nb_users4, nb_sub4);
 		printf("	Antenne 4 %d bits/ms\n", temp);
 		debitTotal += temp;
 
@@ -174,7 +180,7 @@ int main(){
 	/*Incrémentation du temps*/
 		
 		indice = (indice + 1) % 4;
-		nb_user=nb_user+2;
+		nb_user=nb_user+4;
 		/*debitTotal = 0;*/
 
 		nb_users1 = nb_user;
@@ -184,10 +190,12 @@ int main(){
 	
 	printf("\nStatistiques : \n\n");
 	printf("Débit total de la simulation: %d bits/ms\n", (int)(debitTotalSimu/actualTime*2));
+	debitTotalSimu=0;
+	actualTime=0;
 
 
-	/*END WHILE*/
-	/*}*/
+	
+	}
 
 	return 0;
 }
